@@ -1,15 +1,17 @@
+import 'dart:io';
+
 import 'package:dart_backend/models/user.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class TokenCreatorVerifier {
-  String secrate = "powerPuff";
+ 
 
   String generateToken(Map<String, dynamic> data) {
     final jwt = JWT(
       data,
     );
     return jwt.sign(
-      SecretKey(secrate),
+      SecretKey(Platform.environment['JWTSECRATE']!),
       expiresIn: Duration(days: 1),
     );
   }
@@ -18,7 +20,7 @@ class TokenCreatorVerifier {
     try {
       final payload = JWT.verify(
         token,
-        SecretKey(secrate),
+        SecretKey(Platform.environment['JWTSECRATE']!),
       );
 
       final payloadData = payload.payload as Map<String, dynamic>;
